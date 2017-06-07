@@ -368,9 +368,9 @@ UNLIKELY_EOF
     $SUDO "$SUDO_ENV" "$VENV_BIN/letsencrypt" "$@"
   fi
 
-  if [ ! -z "$CONFIGURE_CRON" && -f /etc/debian_version ]; then
+  if [ "$CONFIGURE_CRON" -eq 1 -a -f /etc/debian_version ]; then
     ConfigureCronDeb
-  elif [ ! -z "$CONFIGURE_CRON" ]; then
+  elif [ "$CONFIGURE_CRON" = 1 ]; then
     echo "Generating cron jobs for your system is not supported yet."
     echo "For instructions on doing this manually:"
     echo "https://certbot.eff.org/docs/using.html#renewing-certificates" # these instructions would freak a beginner out
