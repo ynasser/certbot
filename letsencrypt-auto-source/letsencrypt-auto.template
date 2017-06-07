@@ -205,12 +205,12 @@ DeterminePythonVersion() {
 {{ bootstrappers/mageia_common.sh }}
 
 if [ "$ASSUME_YES" = 1 ]; then
-  CONFIGURE_CRON=1
+  configure_cron=1
 else
   read -p "Would you like a certificate renewal cron job to be generated if your cert is successfully installed? (cron will be installed) [Y/n]? " response
   case $response in
     [yY][eE][sS]|[yY]|"")
-      CONFIGURE_CRON=1
+      configure_cron=1
       ;;
     *)
       echo "Will not setup automatic renewal. For instructions on how to do this manually, see here: https://certbot.eff.org/docs/using.html#renewing-certificates"
@@ -368,9 +368,9 @@ UNLIKELY_EOF
     $SUDO "$SUDO_ENV" "$VENV_BIN/letsencrypt" "$@"
   fi
 
-  if [ "$CONFIGURE_CRON" -eq 1 -a -f /etc/debian_version ]; then
+  if [ "$configure_cron" -eq 1 -a -f /etc/debian_version ]; then
     ConfigureCronDeb
-  elif [ "$CONFIGURE_CRON" = 1 ]; then
+  elif [ "$configure_cron" = 1 ]; then
     echo "Generating cron jobs for your system is not supported yet."
     echo "For instructions on doing this manually:"
     echo "https://certbot.eff.org/docs/using.html#renewing-certificates" # these instructions would freak a beginner out
