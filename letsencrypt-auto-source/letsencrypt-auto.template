@@ -207,13 +207,15 @@ DeterminePythonVersion() {
 if [ "$ASSUME_YES" = 1 ]; then
   configure_cron=1
 else
-  read -p "Would you like a certificate renewal cron job to be generated if your cert is successfully installed? (cron will be installed) [Y/n]? " response
+  echo "Would you like a certificate renewal cron job to be generated if your cert is"
+  read -p "successfully installed? (cron will be installed) [Y/n]? " response
   case $response in
     [yY][eE][sS]|[yY]|"")
       configure_cron=1
       ;;
     *)
-      echo "Will not setup automatic renewal. For instructions on how to do this manually, see here: https://certbot.eff.org/docs/using.html#renewing-certificates"
+      echo "Will not setup automatic renewal. For instructions on how to do this manually,"
+      echo "see here: https://certbot.eff.org/docs/using.html#renewing-certificates"
       ;;
   esac
 fi
@@ -370,10 +372,12 @@ UNLIKELY_EOF
 
   if [ "$configure_cron" -eq 1 -a -f /etc/debian_version ]; then
     ConfigureCronDeb
+  elif [ -f /etc/os-release ] && `grep -q openSUSE /etc/os-release` ; then
+    ConfigureCronSuse
   elif [ "$configure_cron" = 1 ]; then
-    echo "Generating cron jobs for your system is not supported yet."
+    echo "Generating cron jobs for your system is not yet supported."
     echo "For instructions on doing this manually:"
-    echo "https://certbot.eff.org/docs/using.html#renewing-certificates" # these instructions would freak a beginner out
+    echo "https://certbot.eff.org/docs/using.html#renewing-certificates"
   fi
 
 else
