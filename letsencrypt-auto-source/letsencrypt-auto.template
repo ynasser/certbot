@@ -372,10 +372,10 @@ UNLIKELY_EOF
 
   if [ "$configure_cron" -eq 1 -a -f /etc/debian_version ]; then
     ConfigureCronDeb
-  elif [ -f /etc/os-release ] && `grep -q openSUSE /etc/os-release` ; then
-    ConfigureCronSuse
   elif [ -f /etc/redhat-release ]; then
     ConfigureCronRpm
+  elif [ -f /etc/os-release ] && `grep -q openSUSE /etc/os-release` ; then
+    ConfigureCronSuse
   elif [ -f /etc/arch-release ]; then
     ConfigureCronArch
   elif [ -f /etc/issue ] && grep -iq "Amazon Linux" /etc/issue ; then
