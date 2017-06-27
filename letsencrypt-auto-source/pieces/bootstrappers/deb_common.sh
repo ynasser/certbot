@@ -153,7 +153,7 @@ ConfigureCronDeb() {
       echo "$crontab_text" > $tmp_cron_file
       $SUDO crontab $tmp_cron_file
       rm $tmp_cron_file
-      $SUDO service crond start
+      $SUDO service cron start
     else
       echo "Not adding a renewal cron job for certbot, as one already exists."
     fi
