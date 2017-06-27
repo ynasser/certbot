@@ -204,24 +204,27 @@ DeterminePythonVersion() {
 {{ bootstrappers/smartos.sh }}
 {{ bootstrappers/mageia_common.sh }}
 
-if [ "$ASSUME_YES" = 1 ]; then
-  configure_cron=1
-else
-  echo "Would you like a certificate renewal cron job to be generated if your cert is"
-  read -p "successfully installed? (cron will be installed) [Y/n]? " response
-  case $response in
-    [yY][eE][sS]|[yY]|"")
-      configure_cron=1
-      ;;
-    *)
-      echo "Will not setup automatic renewal. For instructions on how to do this manually,"
-      echo "see here: https://certbot.eff.org/docs/using.html#renewing-certificates"
-      ;;
-  esac
-fi
+AskToConfigureCron() {
+  if [ "$ASSUME_YES" = 1 ]; then
+    configure_cron=1
+  else
+    echo "Would you like a certificate renewal cron job to be generated if your cert is"
+    read -p "successfully installed? (cron will be installed) [Y/n]? " response
+    case $response in
+      [yY][eE][sS]|[yY]|"")
+        configure_cron=1
+        ;;
+      *)
+        echo "Will not setup automatic renewal. For instructions on how to do this manually,"
+        echo "see here: https://certbot.eff.org/docs/using.html#renewing-certificates"
+        ;;
+    esac
+  fi
+}
 
 # Install required OS packages:
 Bootstrap() {
+  AskToConfigureCron
   if [ -f /etc/debian_version ]; then
     echo "Bootstrapping dependencies for Debian-based OSes..."
     BootstrapDebCommon
@@ -370,20 +373,20 @@ UNLIKELY_EOF
     $SUDO "$SUDO_ENV" "$VENV_BIN/letsencrypt" "$@"
   fi
 
-  if [ "$configure_cron" -eq 1 -a -f /etc/debian_version ]; then
-    ConfigureCronDeb
-  elif [ "$configure_cron" -eq 1 -a -f /etc/redhat-release ]; then
-    ConfigureCronRpm
-  elif [ "$configure_cron" -eq 1 -a -f /etc/os-release ] && `grep -q openSUSE /etc/os-release` ; then
-    ConfigureCronSuse
-  elif [ "$configure_cron" -eq 1 -a -f /etc/arch-release ]; then
-    ConfigureCronArch
-#  elif [ "$configure_cron" -eq 1 -a -f /etc/issue ] && grep -iq "Amazon Linux" /etc/issue ; then
-#    ConfigureCronRpm
-  elif [ "$configure_cron" -eq 1 -a "$configure_cron" = 1 ]; then
-    echo "Generating cron jobs for your system is not yet supported."
-    echo "For instructions on doing this manually:"
-    echo "https://certbot.eff.org/docs/using.html#renewing-certificates"
+  if [ ! -z "configure_cron" ]; then
+    if [ -f /etc/debian_version ]; then
+      ConfigureCronDeb
+    elif [ -f /etc/redhat-release ]; then
+      ConfigureCronRpm
+    elif [ -f /etc/os-release ] && `grep -q openSUSE /etc/os-release` ; then
+      ConfigureCronSuse
+    elif [ -f /etc/arch-release ]; then
+      ConfigureCronArch
+    else
+      echo "Generating cron jobs for your system is not yet supported."
+      echo "For instructions on doing this manually:"
+      echo "https://certbot.eff.org/docs/using.html#renewing-certificates"
+    fi
   fi
 
 else
