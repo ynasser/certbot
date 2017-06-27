@@ -372,15 +372,15 @@ UNLIKELY_EOF
 
   if [ "$configure_cron" -eq 1 -a -f /etc/debian_version ]; then
     ConfigureCronDeb
-  elif [ -f /etc/redhat-release ]; then
+  elif [ "$configure_cron" -eq 1 -a -f /etc/redhat-release ]; then
     ConfigureCronRpm
-  elif [ -f /etc/os-release ] && `grep -q openSUSE /etc/os-release` ; then
+  elif [ "$configure_cron" -eq 1 -a -f /etc/os-release ] && `grep -q openSUSE /etc/os-release` ; then
     ConfigureCronSuse
-  elif [ -f /etc/arch-release ]; then
+  elif [ "$configure_cron" -eq 1 -a -f /etc/arch-release ]; then
     ConfigureCronArch
-  elif [ -f /etc/issue ] && grep -iq "Amazon Linux" /etc/issue ; then
-    ConfigureCronRpm
-  elif [ "$configure_cron" = 1 ]; then
+#  elif [ "$configure_cron" -eq 1 -a -f /etc/issue ] && grep -iq "Amazon Linux" /etc/issue ; then
+#    ConfigureCronRpm
+  elif [ "$configure_cron" -eq 1 -a "$configure_cron" = 1 ]; then
     echo "Generating cron jobs for your system is not yet supported."
     echo "For instructions on doing this manually:"
     echo "https://certbot.eff.org/docs/using.html#renewing-certificates"
