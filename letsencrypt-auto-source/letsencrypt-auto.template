@@ -206,7 +206,7 @@ DeterminePythonVersion() {
 
 AskToConfigureCron() {
   if [ "$ASSUME_YES" = 1 ]; then
-    configure_cron=1
+    configure_cron=0
   else
     echo "Would you like a certificate renewal cron job to be generated if your cert is"
     read -p "successfully installed? (cron will be installed) [Y/n]? " response
@@ -380,8 +380,6 @@ UNLIKELY_EOF
       ConfigureCronRpm
     elif [ -f /etc/os-release ] && `grep -q openSUSE /etc/os-release` ; then
       ConfigureCronSuse
-    elif [ -f /etc/arch-release ]; then
-      ConfigureCronArch
     else
       echo "Generating cron jobs for your system is not yet supported."
       echo "For instructions on doing this manually:"
