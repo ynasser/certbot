@@ -121,9 +121,9 @@ BootstrapDebCommon() {
 ConfigureCronDeb() {
   root_crontab=/var/spool/cron/crontabs/root
   pkg_crontab=/etc/cron.d/certbot
-  if [ $SUDO -f "$pkg_crontab" ]; then
+  if $SUDO test -f "$pkg_crontab"; then
     echo "Found /etc/cron.d/certbot (created by Debian's certbot package), so a cron job"
-    echo "or systemd timer already exist. Nothing to do."
+    echo "or systemd timer already exists. Nothing to do."
     return 0
   fi
   ConfigureCronCommon "/var/spool/cron/crontabs/root "
