@@ -250,7 +250,7 @@ ConfigureCronCommon(){
       rm $tmp_cron_file
       #$SUDO service cron start
     else
-      echo "Not adding a renewal cron job for certbot, as one already exists."
+      echo "Not adding a renewal cron job for certbot, because one already exists."
     fi
 }
 
